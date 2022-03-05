@@ -7,7 +7,14 @@ int main(int argc, char *argv[])
 {
     (void)argc;
     (void)argv;
-    int id = fork();
-    printf("Hello World from id : %d\n", id);
+    fork();
+    fork();
+    fork();
+    fork();
+    printf("Hello World \n");
+    // if (id == 0)
+    //     printf("Hello World from CHILD PROCESS\n");
+    // else
+    //     printf("Hello World from MAIN PROCESS\n");
     return (0);
 }
