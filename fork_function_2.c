@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
     int x = 97;
     if  (write(fd, &x, sizeof(x)) == -1)
         return (2);
-    printf("Written");
+    printf("Written\n");
     close(fd);
     printf("Closed\n");
     return (0);
