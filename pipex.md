@@ -28,3 +28,5 @@ Pour read and write, toujours checker pour les erreurs. ATTENTION !!!!!
 When we fork, the fds are inside the system itself and are copied over the main process to the child process.
 Pipes can be used only in processes with the same hierarchy.
 Pipes behave FIFO(First in First out), Pipe behave like a queue data structure. Size of read and write don’t have to match here. We can write 512 bytes at a time but we can read only 1 byte at a time in a pipe.
+
+dup2 function is very interesting. It takes in the first fd(0 or 1) and it duplicates it to fd[2]

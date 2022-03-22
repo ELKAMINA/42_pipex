@@ -15,10 +15,11 @@ int main(int argc, char *argv[])
     pipe(p);
     if (fork() == 0) {
         close(STDIN_FILENO);    /* fermer stdin */
-        dup(p[0]);              /* stdin devient entrée tube */
+        dup(p[0]); 
+        // duplique les filedescriptors.             /* stdin devient entrée tube */
         close(p[1]);
         close(p[0]);
-        execl("/usr/ucb/wc", "wc", "-l", NULL);
+        execl("/usr/bin/wc", "wc", "-l", NULL);
     } else {
         close(STDOUT_FILENO);   /* fermer stdout */
         dup(p[1]);              /* stdout devient sortie tube */
