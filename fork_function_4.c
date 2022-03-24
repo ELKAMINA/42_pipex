@@ -7,7 +7,19 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <fcntl.h>
+#include "pipex.h"
 
+
+
+void	get_cmd_exec(char *argv, char *env[])
+{
+	char	**argum;
+	int		len;
+
+	argum = ft_split(argv, " ");
+	len = ft_strlen(
+	get_env(env);
+	get_path(argv
 
 void	fst_child_pro(int infile, int outfile, int fd0, int fd1)
 {
@@ -37,6 +49,7 @@ void my_pipex(char *argv[], char *env[])
 	if (pid1 == 0)
     {
 		fst_child_pro(infile, outfile);
+		get_cmd_exec(argv[2], env)
     // child process 1 (ping)
 		//dup2(fd[1], STDOUT_FILENO);
 	//	close(fd[0]);
@@ -65,9 +78,17 @@ int	main(int argc, char *argv[], char *env[])
 {
 	int		infile;
 	int		outfile;
+//	char	*cmd1;
+//	char	*cmd2;
+//	char	*path1;
+//	char	*path2;
 
 	infile = open(argv[1], O_RDONLY);
 	outfile = open(argv[4], O_RDWR | O_CREAT, 0644);
+	if (infile < 0 || outfile < 0)
+		return (0);
+//	cmd1 = ft_split(argv[1], " ");
+//	cmd2 = ft_split(argv[4], " ");
 	if (argc != 5)
 		printf("Missing arguments");
     else
