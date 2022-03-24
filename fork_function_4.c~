@@ -9,15 +9,12 @@
 #include <fcntl.h>
 
 
-void	fst_child_pro(int infile, int outfile, int fd0, int fd1)
+void	fst_child_pro(int infile, int outfile)
 {
-	int	cmd1;
-
-	dup2(infile, STDIN_FILENO);
-	dup2(fd0, STDOUT_FILENO);
+	dup2(fd1, STDOUT_FILENO);
+	close(fd0);
 	close(fd1);
-	close(infile);
-	execve( ,"ping", "5", "google.com", NULL);
+	//	execlp("ping" ,"ping", "5", "google.com", NULL);
 
 
 void my_pipex(char *argv[], char *env[])
