@@ -9,17 +9,15 @@
 #include <fcntl.h>
 #include "pipex.h"
 
-
-
-void	get_cmd_exec(char *argv, char *env[])
+/*void	get_cmd_exec(char *argv, char *env[])
 {
 	char	**argum;
 	int		len;
-
 	argum = ft_split(argv, " ");
-	len = ft_strlen(
-	get_env(env);
-	get_path(argv
+	len = ft_double_strlen(argum);
+	get_env(env, argum);
+	get_path(argv);
+}
 
 void	fst_child_pro(int infile, int outfile, int fd0, int fd1)
 {
@@ -29,12 +27,13 @@ void	fst_child_pro(int infile, int outfile, int fd0, int fd1)
 	dup2(fd0, STDOUT_FILENO);
 	close(fd1);
 	close(infile);
-	execve( ,"ping", "5", "google.com", NULL);
-
-
-void my_pipex(char *argv[], char *env[])
+	execve("ping", "5", "google.com", NULL);
+}
+*/
+void my_pipex(int infile, int outfile, char *argv[], char *env[])
 {
-	int	fd[2];
+	(void)argv;
+	/*int	fd[2];
 	int	piping;
 	int	cmd1;
 	int	cmd2;
@@ -72,6 +71,8 @@ void my_pipex(char *argv[], char *env[])
 	close(fd[1]);
 	waitpid(pid1, NULL, 0);
 	waitpid(pid2, NULL, 0);
+	*/
+	printf("environnement = %s ---- %d : infile -- %d : outfile\n", env[8], infile, outfile);
 }
 
 int	main(int argc, char *argv[], char *env[])
@@ -89,9 +90,9 @@ int	main(int argc, char *argv[], char *env[])
 		return (0);
 //	cmd1 = ft_split(argv[1], " ");
 //	cmd2 = ft_split(argv[4], " ");
-	if (argc != 5)
-		printf("Missing arguments");
-    else
+	//if (argc != 5)
+		//printf("Missing arguments");
+    //else
 		my_pipex(infile, outfile, argv, env);
 	return 0;
 }
