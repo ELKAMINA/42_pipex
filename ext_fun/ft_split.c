@@ -1,4 +1,4 @@
-#include "../pipex.h"
+#include "../my_pipex.h"
 
 static int	count_words(char const *s, char c)
 {

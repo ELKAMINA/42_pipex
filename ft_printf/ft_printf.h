@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aminaelk <aminaelk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ael-khat <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 19:30:56 by ael-khat          #+#    #+#             */
-/*   Updated: 2022/03/23 15:34:34 by aminaelk         ###   ########.fr       */
+/*   Updated: 2022/01/03 19:32:08 by ael-khat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 # include <stdio.h>
 # include <string.h>
 # include <stdarg.h>
-#include "../pipex.h"
 
 int				ft_putnbr_counting(int n);
 int				ft_putchar_counting(char s);
