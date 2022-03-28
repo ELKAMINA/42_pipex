@@ -13,16 +13,14 @@ void	p_child(char *argv[], char *paths[], int in, int ou)
 	int		i;
 
 	i = 1;
-	cmd1_options = ft_split(argv[2]);
+	cmd1_options = ft_split(argv[2], " ");
 	dup2(in, STDIN_FILENO);
 	dup2(fd[1], STDOUT_FILENO);
 	// PROTEGER DUP2
 	close(fd[0]);
 	close(in);
-	while(paths[i])
-	{
-		
-	exe_cmd(cmd1_options[0], );
+	exe_cmd(argv[2], cmd1_options, paths);
+}
 
 void	my_pipex(char *argv[], char *paths[], int in, int ou)
 {
