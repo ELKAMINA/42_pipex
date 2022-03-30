@@ -11,6 +11,8 @@ SRC =	my_pipex.c\
 			./ext_fun/ft_bzero.c\
 			./ext_fun/ft_split.c\
 			./ext_fun/ft_strjoin.c\
+			./ext_fun/ft_strchr.c\
+			./ext_fun/ft_strrchr.c\
 			./freeing/freeing.c\
 
 OBJ = $(SRC:.c=.o)

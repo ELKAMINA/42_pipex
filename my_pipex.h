@@ -17,8 +17,10 @@ char	*ft_strdup(const char *s1);
 void	ft_bzero(void *s, size_t n);
 char	**ft_split(char const *s, char c);
 char	*ft_strjoin(char const *s1, char const *s2);
-void	ft_my_pipex(char *argv[], char **paths);
+int     ft_my_pipex(char *argv[], char **paths, char *env[]);
 void	freeing(char **paths);
+int	    ft_strchr(const char *s, int c);
+int	    ft_strrchr(const char *s, int c);
 
 
 #endif
