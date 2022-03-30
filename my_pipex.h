@@ -18,5 +18,7 @@ void	ft_bzero(void *s, size_t n);
 char	**ft_split(char const *s, char c);
 char	*ft_strjoin(char const *s1, char const *s2);
 void	ft_my_pipex(char *argv[], char **paths);
+void	freeing(char **paths);
+
 
 #endif

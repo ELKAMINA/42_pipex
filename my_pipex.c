@@ -33,7 +33,6 @@ void	p_child_one(int fd[], char *argv[], char **paths)
 	cmd1_options = ft_split(argv[2], ' ');
 	dup2(in, STDIN_FILENO);
 	dup2(fd[1], STDOUT_FILENO);
-	// PROTEGER DUP2
 	close(in);
 	exe_cmd(cmd1_options, paths);
 }
@@ -51,7 +50,6 @@ void	p_child_two(int fd[], char *argv[], char **paths)
 	close(fd[1]);
 	dup2(fd[0], STDIN_FILENO);
 	dup2(ou, STDOUT_FILENO);
-	// PROTEGER DUP2
 	close(ou);
 	exe_cmd(cmd2_options, paths);
 }
@@ -110,12 +108,14 @@ char	*get_path(char *env[])
 int	main(int argc, char *argv[], char *env[])
 {
 	char	**paths;
+	char	*path;
 
-	if (argc < 5 || argc > 5)
+	if (argc != 5)
 		return (0);
-	//printf("test\n");
-	//printf("argv[0]: %s\n", argv[0]);
-	paths = ft_split(get_path(env), ':');
+	path = get_path(env);
+	paths = ft_split(path, ':');
+	free(path);
 	ft_my_pipex(argv, paths);
+	freeing(paths);
 	return (0);
 }

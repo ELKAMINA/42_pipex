@@ -1,5 +1,4 @@
-CC = cc
-#CC = gcc -Wall -Wextra
+CC = gcc -Wall -Wextra -Werror
 
 NAME = pipex
 
@@ -12,6 +11,7 @@ SRC =	my_pipex.c\
 			./ext_fun/ft_bzero.c\
 			./ext_fun/ft_split.c\
 			./ext_fun/ft_strjoin.c\
+			./freeing/freeing.c\
 
 OBJ = $(SRC:.c=.o)
 
