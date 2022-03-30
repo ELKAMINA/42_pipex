@@ -2,79 +2,75 @@
 
 int	parse_args(char *argument)
 {
-	// dprintf(2, "ARG = %s\n", argument);
 	if (argument[0] == '/')
 		return (-1);
 	else if	(ft_strchr(argument, '/') == 2)
 		return (-2);
+	else if (ft_strchr(argument, '.') != 0)
+		return (-3);
 	else	
 		return (0);
 }
 
-int	exe_cmd(char **cd_op, char **paths, char *env[])
+char	*get_cmd(char *cd_op1)
+{
+	int 	ind;
+	int		i;
+	char	*cmd;
+
+	i = 0;
+	ind = ft_strrchr(cd_op1, '/');
+	cmd = malloc(sizeof(char) * (ft_strlen(cd_op1) - ind));
+	ind++;
+	while(cd_op1[ind])
+	{
+		cmd[i] = cd_op1[ind];
+		i++;
+		ind++;
+	}
+	return (cmd);
+}
+
+void	test_paths(char	*paths[], char **cd_op, char *env[])
 {
 	int		i;
 	char	*fi_cd;
+
 	i = 0;
-	if (parse_args(cd_op[0]) == -1)
+	while(paths[i])
 	{
-		fi_cd = cd_op[0];
+		fi_cd = ft_strjoin(paths[i], "/");
+		fi_cd = ft_strjoin(fi_cd, cd_op[0]);
 		if (access(fi_cd, F_OK) == 0)
 		{
 			if (execve(fi_cd, cd_op, env) == -1)
 				perror("No such file or directory");
 		}
+		free(fi_cd);
+		i++;
+	}
+}
+
+int	exe_cmd(char **cd_op, char **paths, char *env[])
+{
+	if (parse_args(cd_op[0]) == -1 || parse_args(cd_op[0]) == -3)
+	{
+		if (access(cd_op[0], F_OK) == 0)
+		{
+			if (execve(cd_op[0], cd_op, env) == -1)
+				perror("No such file or directory");
+		}
 	}
 	else if (parse_args(cd_op[0]) == -2)
 	{
-		int 	ind;
-		int		i;
-		char	*cmd;
-
-		i = 0;
-		ind = ft_strrchr(cd_op[0], '/');
-		cmd = malloc(sizeof(char) * (ft_strlen(cd_op[0]) - ind));
-		ind++;
-		while(cd_op[0][ind])
-		{
-			cmd[i] = cd_op[0][ind];
-			i++;
-			ind++;
-		}
-		while(paths[i])
-		{
-			fi_cd = ft_strjoin(paths[i], "/");
-			fi_cd = ft_strjoin(fi_cd, cmd);
-			if (access(fi_cd, F_OK) == 0)
+		if (access(cd_op[0], F_OK) != 0)
 			{
-				if (execve(fi_cd, cd_op, env) == -1)
-					perror("No such file or directory");
-					//return (errno);
+				perror(cd_op[0]);
+				exit(1);
 			}
-			free(fi_cd);
-			i++;
-		}
 	}
 	else
-	{
-		while(paths[i])
-		{
-			fi_cd = ft_strjoin(paths[i], "/");
-			fi_cd = ft_strjoin(fi_cd, cd_op[0]);
-			if (access(fi_cd, F_OK) == 0)
-			{
-				if (execve(fi_cd, cd_op, env) == -1)
-					perror("No such file or directory");
-					//return (errno);
-			}
-			free(fi_cd);
-			i++;
-		}
-	}
-	
-	
-
-
+		test_paths(paths, cd_op, env);
 	return (EXIT_FAILURE);
 }
 
@@ -94,8 +90,6 @@ void	p_child_one(int fd[], char *argv[], char **paths, char *env[])
 	dup2(in, STDIN_FILENO);
 	dup2(fd[1], STDOUT_FILENO);
 	close(in);
-	dprintf(2, "PROCESS ENFANT 1");
-	dprintf(2, "   =============================================================\n");
 	exe_cmd(cmd1_options, paths, env);
 }
 
@@ -113,8 +107,6 @@ void	p_child_two(int fd[], char *argv[], char **paths, char *env[])
 	dup2(fd[0], STDIN_FILENO);
 	dup2(ou, STDOUT_FILENO);
 	close(ou);
-	dprintf(2, "PROCESS ENFANT 2");
-	dprintf(2, "  ========================================================\n");
 	exe_cmd(cmd2_options, paths, env);
 }
 
@@ -123,8 +115,7 @@ int	ft_my_pipex(char *argv[], char **paths, char *env[])
 	int	fd[2];
 	int	fi;
 	int	sec;
-	// printf("je suis le process parent\n");
-	// printf("PID %d\n", getpid());
+
 	if (pipe(fd) == -1)
 		return (errno);
 	fi = fork();
@@ -133,8 +124,6 @@ int	ft_my_pipex(char *argv[], char **paths, char *env[])
 	if (fi == 0)
 		p_child_one(fd, argv, paths, env);
 	sec = fork();
-	// printf("je suis le process parent et le process enfant\n");
-	// printf("parent process id : %d ------- process ID : %d == PID --- %d == sec\n", getppid(), getpid(), sec);
 	if (sec < 0) 
 		return (errno);
 	if (sec == 0)
