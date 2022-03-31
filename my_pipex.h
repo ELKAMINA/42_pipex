@@ -9,6 +9,12 @@
 #include <fcntl.h>
 #include <sys/wait.h>
 
+# define ERR_INFILE "Infile"
+# define ERR_OUTFILE "Outfile"
+# define ERR_INPUT "Invalid number of arguments.\n"
+# define ERR_PIPE "Pipe"
+# define ERR_CMD "Command not found\n"
+
 char	*ft_strnstr(const char *haystack, const char *needle, size_t len);
 char	*ft_substr(char	const *s, unsigned int start, size_t len);
 size_t	ft_strlen(const char *str);
@@ -21,6 +27,14 @@ int     ft_my_pipex(char *argv[], char **paths, char *env[]);
 void	freeing(char **paths);
 int	    ft_strchr(const char *s, int c);
 int	    ft_strrchr(const char *s, int c);
-
+int     err_msges(char *error);
+int     parse_args(char *argument);
+char    *get_cmd(char *cd_op1);
+void    test_paths(char *paths[], char **cd_op, char *env[]);
+int     exe_cmd(char **cd_op, char **paths, char *env[]);
+void    p_child_one(int fd[], char *argv[], char **paths, char *env[]);
+void    p_child_two(int fd[], char *argv[], char **paths, char *env[]);
+int     ft_my_pipex(char *argv[], char **paths, char *env[]);
+char    *get_path(char *env[]);
 
 #endif

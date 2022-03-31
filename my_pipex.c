@@ -1,94 +1,23 @@
 #include "my_pipex.h"
 
-int	parse_args(char *argument)
-{
-	if (argument[0] == '/')
-		return (-1);
-	else if	(ft_strchr(argument, '/') == 2)
-		return (-2);
-	else if (ft_strchr(argument, '.') != 0)
-		return (-3);
-	else	
-		return (0);
-}
-
-char	*get_cmd(char *cd_op1)
-{
-	int 	ind;
-	int		i;
-	char	*cmd;
-
-	i = 0;
-	ind = ft_strrchr(cd_op1, '/');
-	cmd = malloc(sizeof(char) * (ft_strlen(cd_op1) - ind));
-	ind++;
-	while(cd_op1[ind])
-	{
-		cmd[i] = cd_op1[ind];
-		i++;
-		ind++;
-	}
-	return (cmd);
-}
-
-void	test_paths(char	*paths[], char **cd_op, char *env[])
-{
-	int		i;
-	char	*fi_cd;
-
-	i = 0;
-	while(paths[i])
-	{
-		fi_cd = ft_strjoin(paths[i], "/");
-		fi_cd = ft_strjoin(fi_cd, cd_op[0]);
-		if (access(fi_cd, F_OK) == 0)
-		{
-			if (execve(fi_cd, cd_op, env) == -1)
-				perror("No such file or directory");
-		}
-		free(fi_cd);
-		i++;
-	}
-}
-
-int	exe_cmd(char **cd_op, char **paths, char *env[])
-{
-	if (parse_args(cd_op[0]) == -1 || parse_args(cd_op[0]) == -3)
-	{
-		if (access(cd_op[0], F_OK) == 0)
-		{
-			if (execve(cd_op[0], cd_op, env) == -1)
-				perror("No such file or directory");
-		}
-	}
-	else if (parse_args(cd_op[0]) == -2)
-	{
-		if (access(cd_op[0], F_OK) != 0)
-			{
-				perror(cd_op[0]);
-				exit(1);
-			}
-	}
-	else
-		test_paths(paths, cd_op, env);
-	return (EXIT_FAILURE);
-}
-
 void	p_child_one(int fd[], char *argv[], char **paths, char *env[])
 {
 
 	char	**cmd1_options;
 	int		in;
-	// int		i;
 
-	// i = 0;
-	in = open(argv[1], O_RDONLY | O_CREAT);
+	in = open(argv[1], O_RDONLY);
 	if (in < 0)
-		perror("Error:");
+	{
+		perror("Error ");
+		exit(1);
+	}
 	close(fd[0]);
 	cmd1_options = ft_split(argv[2], ' ');
-	dup2(in, STDIN_FILENO);
-	dup2(fd[1], STDOUT_FILENO);
+	if (dup2(in, STDIN_FILENO) == -1)
+		perror("Error :");
+	if (dup2(fd[1], STDOUT_FILENO) == -1)
+		perror("Error :");
 	close(in);
 	exe_cmd(cmd1_options, paths, env);
 }
@@ -99,13 +28,24 @@ void	p_child_two(int fd[], char *argv[], char **paths, char *env[])
 	int		ou;
 
 	waitpid(-1, NULL, 0);
-	ou = open(argv[4], O_RDWR | O_CREAT | O_TRUNC, 0644);
+	ou = open(argv[4], O_TRUNC | O_CREAT | O_RDWR , 0000644);
 	if (ou < 0)
-		perror("Error:");
+	{
+		perror("Error ");
+		exit(1);
+	}
 	cmd2_options = ft_split(argv[3], ' ');
 	close(fd[1]);
-	dup2(fd[0], STDIN_FILENO);
-	dup2(ou, STDOUT_FILENO);
+	if	(dup2(fd[0], STDIN_FILENO) == -1)
+	{
+		perror("Error ");
+		exit(1);
+	}
+	if (dup2(ou, STDOUT_FILENO) == -1)
+	{
+		perror("Error ");
+		exit(1);
+	}
 	close(ou);
 	exe_cmd(cmd2_options, paths, env);
 }
@@ -115,23 +55,32 @@ int	ft_my_pipex(char *argv[], char **paths, char *env[])
 	int	fd[2];
 	int	fi;
 	int	sec;
+	int	wstatus;
 
 	if (pipe(fd) == -1)
-		return (errno);
+		err_msges(ERR_PIPE);
 	fi = fork();
 	if (fi < 0) 
-		return (errno);
+	{
+		perror("Error ");
+		exit(1);
+	}
 	if (fi == 0)
 		p_child_one(fd, argv, paths, env);
 	sec = fork();
 	if (sec < 0) 
-		return (errno);
+	{
+		perror("Error ");
+		exit(1);
+	}
 	if (sec == 0)
 		p_child_two(fd, argv, paths, env);
 	close(fd[0]);
 	close(fd[1]);
 	waitpid(fi, NULL, 0);
-	waitpid(sec, NULL, 0);
+	waitpid(sec, &wstatus, 0);
+	if (WIFEXITED (wstatus))
+		return (WEXITSTATUS(wstatus));
 	return (0);
 }
 
@@ -161,13 +110,14 @@ int	main(int argc, char *argv[], char *env[])
 {
 	char	**paths;
 	char	*path;
+	int ret;
 
 	if (argc != 5)
-		exit (0);
+		err_msges(ERR_INPUT);
 	path = get_path(env);
 	paths = ft_split(path, ':');
 	free(path);
-	ft_my_pipex(argv, paths, env);
+	ret = ft_my_pipex(argv, paths, env);
 	freeing(paths);
-	return (0);
+	return (ret);
 }
