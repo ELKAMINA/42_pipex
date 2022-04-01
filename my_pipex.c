@@ -1,8 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   my_pipex.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ael-khat <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/04/01 16:40:53 by ael-khat          #+#    #+#             */
+/*   Updated: 2022/04/01 16:44:59 by ael-khat         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "my_pipex.h"
 
 void	p_child_one(int fd[], char *argv[], char **paths, char *env[])
 {
-
 	char	**cmd1_options;
 	int		in;
 	char	*final_cmd;
@@ -25,7 +36,7 @@ void	p_child_one(int fd[], char *argv[], char **paths, char *env[])
 	if (dup2(fd[1], STDOUT_FILENO) == -1)
 		perror("Error :");
 	close(in);
-	if	(execve(final_cmd, cmd1_options, env) == -1)
+	if (execve(final_cmd, cmd1_options, env) == -1)
 		error_msgs();
 }
 
@@ -35,7 +46,7 @@ void	p_child_two(int fd[], char *argv[], char **paths, char *env[])
 	char	*final_cmd;
 	int		ou;
 
-	ou = open(argv[4], O_TRUNC | O_CREAT | O_RDWR , 0000644);
+	ou = open(argv[4], O_TRUNC | O_CREAT | O_RDWR, 0000644);
 	if (ou < 0)
 		error_msgs();
 	cmd2_options = ft_split(argv[3], ' ');
@@ -48,7 +59,7 @@ void	p_child_two(int fd[], char *argv[], char **paths, char *env[])
 		cmd_not_found(ERR_CMD);
 	}
 	close(fd[1]);
-	if	(dup2(fd[0], STDIN_FILENO) == -1)
+	if (dup2(fd[0], STDIN_FILENO) == -1)
 		error_msgs();
 	if (dup2(ou, STDOUT_FILENO) == -1)
 		error_msgs();
@@ -67,12 +78,12 @@ int	ft_my_pipex(char *argv[], char **paths, char *env[])
 	if (pipe(fd) == -1)
 		pers_err_msges(ERR_PIPE);
 	fi = fork();
-	if (fi < 0) 
+	if (fi < 0)
 		error_msgs();
 	if (fi == 0)
-		p_child_one(fd, argv, paths, env);	
+		p_child_one(fd, argv, paths, env);
 	sec = fork();
-	if (sec < 0) 
+	if (sec < 0)
 		error_msgs();
 	if (sec == 0)
 		p_child_two(fd, argv, paths, env);
@@ -92,15 +103,15 @@ char	*get_path(char *env[])
 	char	*path;
 
 	i = 0;
-	while(env[i])
+	while (env[i])
 	{
 		j = 0;
 		if (ft_strnstr(env[i], "PATH=", 5) != NULL)
 		{
 			path = ft_substr(env[i], 5, (ft_strlen(env[i]) - 5));
-			return(path);
+			return (path);
 		}
-		while(env[i][j])
+		while (env[i][j])
 			j++;
 		i++;
 	}
@@ -111,7 +122,7 @@ int	main(int argc, char *argv[], char *env[])
 {
 	char	**paths;
 	char	*path;
-	int ret;
+	int		ret;
 
 	if (argc != 5)
 		pers_err_msges(ERR_INPUT);

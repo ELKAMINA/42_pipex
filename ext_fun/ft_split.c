@@ -1,31 +1,105 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_split.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ael-khat <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/04/01 17:50:55 by ael-khat          #+#    #+#             */
+/*   Updated: 2022/04/01 17:53:39 by ael-khat         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../my_pipex.h"
 
-char	**ft_split (char *str, char sep)
+static int	count_words(char const *s, char c)
+{
+	int	i;
+	int	j;
+
+	j = 1;
+	i = 0;
+	if (!s)
+		return (0);
+	if (s[0] == c)
+		j = 0;
+	while (s[i] && c != '\0')
+	{
+		if (s[i] == c)
+		{
+			j ++;
+			while (s[i] == c)
+				i++;
+			if (!s[i])
+				return (j - 1);
+		}
+		i++;
+	}
+	return (j);
+}
+
+static int	is_mychar(char c, char s)
+{
+	if (c == s)
+		return (1);
+	else
+		return (0);
+}
+
+static char	*to_malloc(char const *str, char c)
+{
+	char	*word;
+	int		i;
+
+	i = 0;
+	while (str[i] && !is_mychar(str[i], c))
+		i ++;
+	word = (char *)malloc((i + 1) * sizeof(char));
+	if (word == NULL)
+		return (NULL);
+	i = 0;
+	while (str[i] && !is_mychar(str[i], c))
+	{
+		word[i] = str[i];
+		i ++;
+	}
+	word[i] = '\0';
+	return (word);
+}
+
+static char	**ft_malloc_error(char **tab, int j)
+{
+	while (j--)
+		free(tab[j]);
+	free(tab[j]);
+	return (NULL);
+}
+
+char	**ft_split(char const *s, char c)
 {
 	char	**tab;
-	int		count;
-	int		i;
 	int		j;
+	int		i;
 
-	count = 0;
-	j = 0;
-	while (str[j])
-	{
-		if (str[j++] == sep)
-			count++;
-	}
-	tab = malloc(sizeof(char *) * (count + 2));
-	if	(!tab)
-		return (NULL);
-	tab[count + 1] = NULL;
 	i = 0;
-	while (i < count + 1)
+	j = 0;
+	tab = malloc((count_words(s, c) + 1) * sizeof(char *));
+	if (tab == NULL)
+		return (NULL);
+	while (s && s[i])
 	{
-		j = 0;
-		while (str[j] && str[j] != sep)
+		while (s[i] && is_mychar(s[i], c))
+			i++;
+		if (s[i] && !is_mychar(s[i], c))
+		{
+			tab[j] = to_malloc((s + i), c);
+			if (tab[j] == NULL)
+				return (ft_malloc_error(&tab[j], count_words(s, c)));
 			j++;
-		tab[i++] = str_ndup(str, j);
-		str = str + j + 1;
+		}
+		while (s[i] && !(is_mychar(s[i], c)))
+			i++;
 	}
+	tab[j] = NULL;
 	return (tab);
 }
