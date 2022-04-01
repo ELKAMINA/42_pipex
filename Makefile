@@ -4,6 +4,7 @@ NAME = pipex
 
 SRC =	my_pipex.c\
 			my_pipex2.c\
+			./err_msgs/err_messages.c\
 			./ext_fun/ft_strnstr.c\
 			./ext_fun/ft_substr.c\
 			./ext_fun/ft_strlen.c\

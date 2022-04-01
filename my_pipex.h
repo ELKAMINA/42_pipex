@@ -29,12 +29,15 @@ int	    ft_strchr(const char *s, int c);
 int	    ft_strrchr(const char *s, int c);
 int     err_msges(char *error);
 int     parse_args(char *argument);
-char    *get_cmd(char *cd_op1);
-void    test_paths(char *paths[], char **cd_op, char *env[]);
+char	*get_cmd(char *final_cmd, char *paths[]);
+char	*test_paths(char *final_cmd, char	**paths);
 int     exe_cmd(char **cd_op, char **paths, char *env[]);
 void    p_child_one(int fd[], char *argv[], char **paths, char *env[]);
 void    p_child_two(int fd[], char *argv[], char **paths, char *env[]);
 int     ft_my_pipex(char *argv[], char **paths, char *env[]);
 char    *get_path(char *env[]);
+void    error_msgs();
+int	    pers_err_msges(char *error);
+int     cmd_not_found(char *error);
 
 #endif
