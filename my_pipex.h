@@ -6,7 +6,7 @@
 /*   By: ael-khat <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 16:48:08 by ael-khat          #+#    #+#             */
-/*   Updated: 2022/04/01 16:52:01 by ael-khat         ###   ########.fr       */
+/*   Updated: 2022/04/01 18:29:20 by ael-khat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	*ft_calloc(size_t count, size_t size);
 char	*ft_strdup(const char *s1);
 char	*str_ndup(char *str, unsigned int n);
 void	ft_bzero(void *s, size_t n);
-char	**ft_split(char *s, char c);
+char	**ft_split(char const *s, char c);
 char	*ft_strjoin(char const *s1, char const *s2);
 int		ft_my_pipex(char *argv[], char **paths, char *env[]);
 void	freeing(char **paths);
@@ -51,5 +51,7 @@ char	*get_path(char *env[]);
 void	error_msgs(void);
 int		pers_err_msges(char *error);
 int		cmd_not_found(char *error);
+void	freeing_execution(char *paths[], char *cmd, char *cmd_opt[]);
+void	freeing_cmd(char *paths[], char *cmd, char *cmd_opt[]);
 
 #endif

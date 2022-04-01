@@ -6,7 +6,7 @@
 /*   By: ael-khat <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 17:56:58 by ael-khat          #+#    #+#             */
-/*   Updated: 2022/04/01 17:57:04 by ael-khat         ###   ########.fr       */
+/*   Updated: 2022/04/01 18:28:46 by ael-khat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,4 +25,20 @@ void	freeing(char *paths[])
 	}
 	free(paths);
 	paths = NULL;
+}
+
+void	freeing_execution(char *paths[], char *cmd, char *cmd_opt[])
+{
+	freeing(cmd_opt);
+	free(cmd);
+	freeing(paths);
+	error_msgs();
+}
+
+void	freeing_cmd(char *paths[], char *cmd, char *cmd_opt[])
+{
+	freeing(cmd_opt);
+	free(cmd);
+	freeing(paths);
+	cmd_not_found(ERR_CMD);
 }

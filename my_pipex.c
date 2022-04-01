@@ -37,7 +37,7 @@ void	p_child_one(int fd[], char *argv[], char **paths, char *env[])
 		perror("Error :");
 	close(in);
 	if (execve(final_cmd, cmd1_options, env) == -1)
-		error_msgs();
+		freeing_execution(paths, final_cmd, cmd1_options);
 }
 
 void	p_child_two(int fd[], char *argv[], char **paths, char *env[])
@@ -48,16 +48,14 @@ void	p_child_two(int fd[], char *argv[], char **paths, char *env[])
 
 	ou = open(argv[4], O_TRUNC | O_CREAT | O_RDWR, 0000644);
 	if (ou < 0)
+	{
+		freeing(paths);
 		error_msgs();
+	}
 	cmd2_options = ft_split(argv[3], ' ');
 	final_cmd = get_cmd(cmd2_options[0], paths);
 	if (!final_cmd)
-	{
-		freeing(cmd2_options);
-		free(final_cmd);
-		freeing(paths);
-		cmd_not_found(ERR_CMD);
-	}
+		freeing_cmd(paths, final_cmd, cmd2_options);
 	close(fd[1]);
 	if (dup2(fd[0], STDIN_FILENO) == -1)
 		error_msgs();
@@ -65,7 +63,7 @@ void	p_child_two(int fd[], char *argv[], char **paths, char *env[])
 		error_msgs();
 	close(ou);
 	if (execve(final_cmd, cmd2_options, env) == -1)
-		error_msgs();
+		freeing_execution(paths, final_cmd, cmd2_options);
 }
 
 int	ft_my_pipex(char *argv[], char **paths, char *env[])
