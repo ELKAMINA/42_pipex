@@ -9,6 +9,7 @@ SRC =	my_pipex.c\
 			./ext_fun/ft_substr.c\
 			./ext_fun/ft_strlen.c\
 			./ext_fun/ft_strdup.c\
+			./ext_fun/ft_strndup.c\
 			./ext_fun/ft_calloc.c\
 			./ext_fun/ft_bzero.c\
 			./ext_fun/ft_split.c\

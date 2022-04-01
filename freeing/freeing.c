@@ -1,6 +1,6 @@
 #include "../my_pipex.h"
 
-void	freeing(char **paths)
+void	freeing(char *paths[])
 {
 	int	i;
 

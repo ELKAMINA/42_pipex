@@ -14,13 +14,18 @@ int	parse_args(char *argument)
 
 char	*get_cmd(char *final_cmd, char *paths[])
 {
+	char	*fin_cd;
+
 	if (parse_args(final_cmd) == -1)
 	{
 		if (access(final_cmd, F_OK) == 0)
 			return (final_cmd);
 	}
 	else
-		test_paths(final_cmd, paths);
+	{
+		fin_cd = test_paths(final_cmd, paths);
+			return (fin_cd);
+	}
 	return (NULL);
 }
 char	*test_paths(char *final_cmd, char	*paths[])

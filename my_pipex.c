@@ -6,20 +6,18 @@ void	p_child_one(int fd[], char *argv[], char **paths, char *env[])
 	char	**cmd1_options;
 	int		in;
 	char	*final_cmd;
-	// int		i;
 
 	in = open(argv[1], O_RDONLY);
 	if (in < 0)
 		error_msgs();
 	close(fd[0]);
 	cmd1_options = ft_split(argv[2], ' ');
-	dprintf(2, "%s\n", cmd1_options[0]);
 	final_cmd = get_cmd(cmd1_options[0], paths);
-	dprintf(2, "%s\n", final_cmd);
-	if (!final_cmd)
+	if (final_cmd == NULL)
 	{
 		freeing(cmd1_options);
 		free(final_cmd);
+		freeing(paths);
 		cmd_not_found(ERR_CMD);
 	}
 	if (dup2(in, STDIN_FILENO) == -1)
@@ -36,18 +34,16 @@ void	p_child_two(int fd[], char *argv[], char **paths, char *env[])
 	char	*final_cmd;
 	int		ou;
 
-	//waitpid(-1, NULL, 0);
 	ou = open(argv[4], O_TRUNC | O_CREAT | O_RDWR , 0000644);
 	if (ou < 0)
 		error_msgs();
 	cmd2_options = ft_split(argv[3], ' ');
-	dprintf(2, "%s\n", cmd2_options[0]);
 	final_cmd = get_cmd(cmd2_options[0], paths);
-	//dprintf(2, "%s\n", final_cmd);
 	if (!final_cmd)
 	{
 		freeing(cmd2_options);
 		free(final_cmd);
+		freeing(paths);
 		cmd_not_found(ERR_CMD);
 	}
 	close(fd[1]);
@@ -57,8 +53,6 @@ void	p_child_two(int fd[], char *argv[], char **paths, char *env[])
 		error_msgs();
 	close(ou);
 	execve(final_cmd, cmd2_options, env);
-	//freeing(cmd2_options);
-	//freeing(paths);
 }
 
 int	ft_my_pipex(char *argv[], char **paths, char *env[])
@@ -68,25 +62,20 @@ int	ft_my_pipex(char *argv[], char **paths, char *env[])
 	int	sec;
 	int	wstatus;
 
-	//printf("PID parent = %d ====  PPID parent= %d\n", getpid(), getppid());
 	if (pipe(fd) == -1)
 		pers_err_msges(ERR_PIPE);
 	fi = fork();
-	//printf("PID 1 = %d ====  PPID 1= %d\n", getpid(), getppid());
 	if (fi < 0) 
 		error_msgs();
 	if (fi == 0)
 		p_child_one(fd, argv, paths, env);	
 	sec = fork();
-	//printf("PID 2 = %d ====  PPID 2= %d\n", getpid(), getppid());
 	if (sec < 0) 
 		error_msgs();
 	if (sec == 0)
 		p_child_two(fd, argv, paths, env);
 	close(fd[0]);
 	close(fd[1]);
-	// printf("fi = %d\n", fi);
-	// printf("sec =%d\n", sec);
 	waitpid(fi, &wstatus, 0);
 	waitpid(sec, &wstatus, 0);
 	if (WIFEXITED (wstatus))
@@ -126,6 +115,8 @@ int	main(int argc, char *argv[], char *env[])
 		pers_err_msges(ERR_INPUT);
 	path = get_path(env);
 	paths = ft_split(path, ':');
+	if (!paths[0])
+		freeing(paths);
 	free(path);
 	ret = ft_my_pipex(argv, paths, env);
 	freeing(paths);
