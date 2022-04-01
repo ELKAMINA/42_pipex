@@ -1,6 +1,6 @@
 #include "../my_pipex.h"
 
-void    error_msgs()
+void    error_msgs(void)
 {
     perror("Error ");
     exit(1);

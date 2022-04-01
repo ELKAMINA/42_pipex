@@ -25,7 +25,8 @@ void	p_child_one(int fd[], char *argv[], char **paths, char *env[])
 	if (dup2(fd[1], STDOUT_FILENO) == -1)
 		perror("Error :");
 	close(in);
-	execve(final_cmd, cmd1_options, env);
+	if	(execve(final_cmd, cmd1_options, env) == -1)
+		error_msgs();
 }
 
 void	p_child_two(int fd[], char *argv[], char **paths, char *env[])
@@ -52,7 +53,8 @@ void	p_child_two(int fd[], char *argv[], char **paths, char *env[])
 	if (dup2(ou, STDOUT_FILENO) == -1)
 		error_msgs();
 	close(ou);
-	execve(final_cmd, cmd2_options, env);
+	if (execve(final_cmd, cmd2_options, env) == -1)
+		error_msgs();
 }
 
 int	ft_my_pipex(char *argv[], char **paths, char *env[])
