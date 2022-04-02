@@ -6,7 +6,7 @@
 /*   By: ael-khat <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 16:40:53 by ael-khat          #+#    #+#             */
-/*   Updated: 2022/04/01 16:44:59 by ael-khat         ###   ########.fr       */
+/*   Updated: 2022/04/02 15:57:53 by ael-khat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,7 @@ void	p_child_one(int fd[], char *argv[], char **paths, char *env[])
 	cmd1_options = ft_split(argv[2], ' ');
 	final_cmd = get_cmd(cmd1_options[0], paths);
 	if (final_cmd == NULL)
-	{
-		freeing(cmd1_options);
-		free(final_cmd);
-		freeing(paths);
-		cmd_not_found(ERR_CMD);
-	}
+		freeing_cmd(paths, final_cmd, cmd1_options);
 	if (dup2(in, STDIN_FILENO) == -1)
 		perror("Error :");
 	if (dup2(fd[1], STDOUT_FILENO) == -1)
