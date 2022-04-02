@@ -20,7 +20,10 @@ void	p_child_one(int fd[], char *argv[], char **paths, char *env[])
 
 	in = open(argv[1], O_RDONLY);
 	if (in < 0)
+	{
+		freeing(paths);
 		error_msgs();
+	}
 	close(fd[0]);
 	cmd1_options = ft_split(argv[2], ' ');
 	final_cmd = get_cmd(cmd1_options[0], paths);
