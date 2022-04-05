@@ -120,12 +120,15 @@ int	main(int argc, char *argv[], char *env[])
 	char	*path;
 	int		ret;
 
+	if (!env[0])
+	{
+		write(1, "Error : Env isn't set", 22);
+		exit(1);
+	}
 	if (argc != 5)
 		pers_err_msges(ERR_INPUT);
 	path = get_path(env);
 	paths = ft_split(path, ':');
-	if (!paths[0])
-		freeing(paths);
 	free(path);
 	ret = ft_my_pipex(argv, paths, env);
 	freeing(paths);
